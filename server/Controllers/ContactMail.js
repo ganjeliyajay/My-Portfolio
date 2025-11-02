@@ -110,7 +110,7 @@ export const sendMail = async (req, res) => {
     })
 
 
-
+    console.log(userReplyOption)
     // await transporter.sendMail(mailOption)
     // await transporter.sendMail(userReplyOption)
 
