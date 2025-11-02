@@ -1,6 +1,5 @@
 import { transporter } from "../Configs/transporter.js";
 import { $Mail } from "../Modules/Mail.js";
-import { text } from "express";
 
 export const sendMail = async (req, res) => {
   try {
