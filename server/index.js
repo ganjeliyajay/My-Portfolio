@@ -12,7 +12,7 @@ const app = express()
 app.use(json(), urlencoded({ extended: true }))
 app.use(cors())
 
-const PORT = process.env.PORT
+
 
 //Database connect
 db()
@@ -22,4 +22,5 @@ db()
 app.use('/portfolio', ProjectRoute)
 app.use('/portfolio/send-mail', ContactRoute)
 
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`server is running on : ${PORT}`))
