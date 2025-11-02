@@ -3,4 +3,4 @@ import { createProject, getProject } from "../Controllers/ProjectController.js";
 
 export const ProjectRoute = Router()
 
-ProjectRoute.route('/').post(createProject).get(getProject)
+ProjectRoute.route('/projects').post(createProject).get(getProject)
