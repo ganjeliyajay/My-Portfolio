@@ -5,7 +5,7 @@ const project = import.meta.env.VITE_BASE_API
 
 export const getProject = createAsyncThunk('getproject', async (_, { rejectWithValue }) => {
     try {
-        const res = await axios.get(`${project}/projects`, { withCredentials: true })
+        const res = await axios.get(`${project}/portfolio/projects`, { withCredentials: true })
         return res.data
     } catch (error) {
         console.log(error)
