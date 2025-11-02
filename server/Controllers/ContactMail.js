@@ -4,7 +4,7 @@ import { text } from "express";
 
 export const sendMail = async (req, res) => {
   try {
-    const { name, email, message} = req.body
+    const { name, email, message } = req.body
 
     if (!name || !email || !message) {
       return res.status(400).json({ message: 'All fields are required' });
@@ -63,7 +63,54 @@ export const sendMail = async (req, res) => {
     };
 
 
+    //response from me to contact user
+    const userReplyOption = {
+      from: process.env.RECEIVERMAIL, // your portfolio email
+      to: email, // the visitor's email
+      subject: "🌟 Thanks for reaching out to me!",
+      html: `
+  <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #E0EAFC 0%, #CFDEF3 100%); padding: 30px;">
+    <div style="max-width: 650px; margin: auto; background: #ffffff; border-radius: 12px; box-shadow: 0 6px 20px rgba(0,0,0,0.1); overflow: hidden;">
+
+      <!-- Header -->
+      <div style="background: linear-gradient(90deg, #1E3A8A, #2563EB); color: #ffffff; padding: 25px 20px; text-align: center;">
+        <h1 style="margin: 0; font-size: 26px;">🙌 Thank You for Contacting Me!</h1>
+      </div>
+
+      <!-- Body -->
+      <div style="padding: 25px; color: #333333; line-height: 1.7;">
+        <p style="font-size: 16px;">Hi <strong>${name}</strong>,</p>
+        <p style="font-size: 15px;">
+          I’ve received your message and appreciate you taking the time to reach out.  
+          I’ll get back to you as soon as possible. 🚀
+        </p>
+
+        <div style="background-color: #F3F4F6; border-left: 4px solid #2563EB; padding: 15px; border-radius: 8px; font-size: 15px;">
+          <strong>Your Message:</strong><br />
+          ${message}
+        </div>
+
+        <p style="margin-top: 25px; font-size: 14px; color: #555;">
+          Meanwhile, feel free to explore more of my work at  
+          <a href="https://your-portfolio-link.com" style="color: #2563EB; text-decoration: none;">my portfolio</a>.
+        </p>
+      </div>
+
+      <!-- Footer -->
+      <div style="background: linear-gradient(90deg, #2563EB, #1E3A8A); color: #fff; padding: 15px; text-align: center; font-size: 13px;">
+        <p style="margin: 0;">Best regards,</p>
+        <p style="margin: 0;">💙 <strong>Ganjeliya Jay</strong> — Portfolio Developer</p>
+      </div>
+
+    </div>
+  </div>
+  `,
+    };
+
+
+
     await transporter.sendMail(mailOption)
+    await transporter.sendMail(userReplyOption)
 
     const data = $Mail({
       name,

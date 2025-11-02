@@ -33,10 +33,10 @@ export const ContactSection = () => {
         message: "",
       });
 
-      toast("Mail Succesfully Send!", {
+      toast("📧 Mail Succesfully Send!", {
         position: "top-right",
         autoClose: 1000,
-        theme: "light",
+        theme: "dark",
         transition: Bounce,
       })
     } catch (err) {
