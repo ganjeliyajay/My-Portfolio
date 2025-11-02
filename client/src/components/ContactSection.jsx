@@ -1,6 +1,6 @@
 import { Github, Instagram, Linkedin, Mail, MapPin, Phone, Send } from "lucide-react";
 import { useState } from "react";
-import { sendMail } from "../Redux/Thunk/ContactMailthunk";
+import { sendMail } from "../Redux/Thunk/ContactMailThunk";
 import { useDispatch, useSelector } from "react-redux";
 import { Bounce, toast } from "react-toastify";
 

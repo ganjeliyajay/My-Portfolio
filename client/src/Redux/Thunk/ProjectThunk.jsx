@@ -1,9 +1,11 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
+const project = import.meta.env.VITE_BASE_API
+
 export const getProject = createAsyncThunk('getproject', async (_, { rejectWithValue }) => {
     try {
-        const res = await axios.get('http://localhost:4040/Portfolio')
+        const res = await axios.get(`${project}`)
         return res.data
     } catch (error) {
         console.log(error)

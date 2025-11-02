@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { sendMail } from "../Thunk/ContactMailthunk";
+import { sendMail } from "../Thunk/ContactMailThunk";
 
 const ContactMailSlice = createSlice({
     name: 'ContactMail',

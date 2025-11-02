@@ -122,6 +122,7 @@ export const sendMail = async (req, res) => {
     return res.status(201).json({ message: 'Mail send succesfully!' });
 
   } catch (err) {
+    console.log(err)
     return res.status(500).json({ message: "Server error", error: err.message });
   }
 }
