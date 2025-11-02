@@ -1,15 +1,18 @@
 import { transporter } from "../Configs/transporter.js";
 import { $Mail } from "../Modules/Mail.js";
+import { Resend } from "resend";
+
 
 export const sendMail = async (req, res) => {
   try {
     const { name, email, message } = req.body
+    const resend = new Resend(process.env.RESEND_API_KEY);
 
     if (!name || !email || !message) {
       return res.status(400).json({ message: 'All fields are required' });
     }
 
-    const mailOption = {
+    const mailOption = await resend.emails.send({
       from: email,
       to: process.env.RECEIVERMAIL,
       subject: `💬 New Portfolio Message from ${name}`,
@@ -59,11 +62,11 @@ export const sendMail = async (req, res) => {
     </div>
   </div>
   `,
-    };
+    });
 
 
     //response from me to contact user
-    const userReplyOption = {
+    const userReplyOption = await resend.emails.send({
       from: process.env.RECEIVERMAIL, // your portfolio email
       to: email, // the visitor's email
       subject: "🌟 Thanks for reaching out to me!",
@@ -104,12 +107,12 @@ export const sendMail = async (req, res) => {
     </div>
   </div>
   `,
-    };
+    })
 
 
 
-    await transporter.sendMail(mailOption)
-    await transporter.sendMail(userReplyOption)
+    // await transporter.sendMail(mailOption)
+    // await transporter.sendMail(userReplyOption)
 
     const data = $Mail({
       name,
