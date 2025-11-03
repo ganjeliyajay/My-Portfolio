@@ -106,9 +106,24 @@ export const ContactSection = () => {
             <div className="pt-8">
               <h4 className="font-medium mb-4 text-center">Connect With Me</h4>
               <div className="flex space-x-4 justify-center ">
-                <Linkedin className="cursor-pointer hover:text-primary hover:scale-110 transition-all ease-in-out" />
-                <Instagram className="cursor-pointer hover:text-primary hover:scale-110 transition-all ease-in-out" />
-                <Github className="cursor-pointer hover:text-primary hover:scale-110 transition-all ease-in-out" />
+                <a
+                  href="https://github.com/ganjeliyajay"
+                  target="_blank"
+                  rel="noopener noreferrer">
+                  <Github className="cursor-pointer hover:text-primary hover:scale-110 transition-all ease-in-out" />
+                </a>
+                <a
+                  href="https://www.linkedin.com/in/ganjeliya-jay"
+                  target="_blank"
+                  rel="noopener noreferrer">
+                  <Linkedin className="cursor-pointer hover:text-primary hover:scale-110 transition-all ease-in-out" />
+                </a>
+                <a
+                  href="https://www.instagram.com/ganjeliya_jay_0745/"
+                  target="_blank"
+                  rel="noopener noreferrer">
+                  <Instagram className="cursor-pointer hover:text-primary hover:scale-110 transition-all ease-in-out" />
+                </a>
               </div>
             </div>
           </div>
