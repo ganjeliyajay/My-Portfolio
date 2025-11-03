@@ -24,11 +24,11 @@ export const Navbar = () => {
   return (
     <nav
       className={cn(
-        "fixed w-full z-50 transition-all duration-300 backdrop-blur-[3px]",
+        "fixed top-0 left-0 w-full z-[100] transition-all duration-300 backdrop-blur-[3px]",
         isScrolled ? "py-4 bg-background/70 shadow-sm" : "py-5"
       )}
     >
-      <div className="container flex items-center justify-between px-4 sm:px-6">
+      <div className="container flex items-center justify-between px-4 sm:px-6 relative">
         {/* Logo */}
         <a
           className="text-xl font-bold text-primary flex items-center"
@@ -57,26 +57,26 @@ export const Navbar = () => {
           ))}
         </div>
 
-        {/* Mobile Menu Toggle */}
+        {/* Mobile Menu Toggle — always on top */}
         <button
           onClick={() => setIsMenuOpen((prev) => !prev)}
-          className="md:hidden p-2 text-foreground z-[60] rounded-md focus:outline-none focus:ring-2 focus:ring-primary transition"
-          aria-label={isMenuOpen ? "Close Menu" : "Open Menu"}
+          className="md:hidden p-2 text-foreground z-[110] relative rounded-md focus:outline-none focus:ring-2 focus:ring-primary transition"
+          aria-label={isMenuOpen ? 'Close Menu' : 'Open Menu'}
         >
           {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
         </button>
       </div>
 
-      {/* ✅ Fullscreen Mobile Nav */}
+      {/* Fullscreen Mobile Nav */}
       <div
         className={cn(
-          "fixed top-0 left-0 w-full h-screen flex flex-col items-center justify-center bg-background/95 backdrop-blur-xl transition-all duration-300 ease-in-out md:hidden",
+          "fixed top-0 left-0 w-full h-screen flex flex-col items-center justify-center bg-background/95 backdrop-blur-xl transition-all duration-300 ease-in-out md:hidden z-[90]",
           isMenuOpen
             ? "opacity-100 visible translate-y-0"
             : "opacity-0 invisible -translate-y-full"
         )}
       >
-        <div className="flex flex-col items-center justify-center space-y-10 text-xl font-semibold">
+        <div className="flex flex-col items-center justify-center space-y-10 text-2xl font-semibold">
           {navItems.map((item, key) => (
             <a
               key={key}
