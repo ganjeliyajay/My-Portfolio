@@ -3,7 +3,7 @@
 A modern and responsive personal portfolio website built using the **MERN stack**.  
 This project showcases my skills, projects, and contact information — with smooth animations, dark mode design, and a clean UI.
 
-🔗 **Live Website:** [https://ganjeliyajay.netlify.com](https://ganjeliyajay.netlify.app)
+🔗 **Live Website:** [https://ganjeliyajay.netlify.app](https://ganjeliyajay.netlify.app)
 
 ---
 
@@ -92,3 +92,4 @@ Unauthorized use or modification of this code is not permitted without prior app
 ---
 
 ⭐ If you like this project, please consider giving it a star on [GitHub](https://github.com/ganjeliyajay/My-Portfolio)!
+
