@@ -2,107 +2,180 @@ import { ArrowRight, ExternalLink, Github } from "lucide-react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getProject } from "../Redux/Thunk/ProjectThunk";
-import commingSoon from '../assets/comming-soon.png'
+import commingSoon from "../assets/comming-soon.png";
+import { SkeletonProjectCard } from "./SkeletonProjectCard";
 
 export const ProjectsSection = () => {
-  const dispatch = useDispatch()
 
-  const { projects, loading, error, process } = useSelector((state) => state.project)
+  const dispatch = useDispatch();
+  const { projects, loading, error } = useSelector((state) => state.project);
 
   useEffect(() => {
-     dispatch(getProject())
-  }, [dispatch])
+    dispatch(getProject());
+  }, [dispatch]);
 
   return (
-    <section id="projects" className="py-24 px-4 relative">
-      <div className="container mx-auto max-w-5xl">
-        <h2 className="text-3xl md:text-4xl font-bold mb-4 text-center">
-          {" "}
-          Featured <span className="text-primary"> Projects </span>
+    <section id="projects" className="py-24 px-6">
+
+      <div className="container mx-auto max-w-7xl">
+
+        {/* Title */}
+        <h2 className="text-3xl md:text-4xl font-bold mb-5 text-center">
+          Featured <span className="text-primary">Projects</span>
         </h2>
 
-        <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
-          Here are some of my recent projects. Each project was carefully
-          crafted with attention to detail, performance, and user experience.
+        <p className="text-center text-muted-foreground mb-16 max-w-2xl mx-auto">
+          A collection of projects built using modern technologies focusing on
+          performance, scalability and great user experience.
         </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {projects ? projects.map((project) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+
+          {/* Skeleton */}
+          {loading &&
+            Array(6)
+              .fill(0)
+              .map((_, index) => (
+                <SkeletonProjectCard key={index} />
+              ))
+          }
+
+          {/* Error */}
+          {error && (
+            <p className="text-red-500 text-center col-span-3">
+              Failed to load projects
+            </p>
+          )}
+
+          {/* Projects */}
+          {!loading && projects && projects.map((project, index) => (
+
             <div
               key={project._id}
-              className="group bg-card rounded-lg overflow-hidden shadow-xs card-hover"
+              style={{ animationDelay: `${index * 0.15}s` }}
+              className="group h-full bg-card border border-border rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-700 ease-out hover:-translate-y-3 fade-up"
             >
-              <div className="h-48 overflow-hidden">
-                {
-                  project?.demo ? (<img
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                    src={commingSoon}></img>) : (<img
-                      src={project.image}
-                      alt={project.title}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                    />)
-                }
-              </div>
 
-              <div className="p-6">
+              {/* Image */}
+              <div className="relative h-52 overflow-hidden">
 
+                <img
+                  loading="lazy"
+                  src={project?.demo ? commingSoon : project.image}
+                  alt={project.title}
+                  className="w-full h-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-110"
+                />
 
+                {/* Hover Overlay */}
+                {!project?.demo && (
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all duration-700 ease-out flex items-center justify-center gap-4 opacity-0 group-hover:opacity-100">
 
-                {
-                  project?.demo ? '' : <div className="flex flex-wrap gap-2 mb-4">
-                    {project.tags.map((tag) => (
-                      <span className="px-2 py-1 text-xs font-medium border rounded-full bg-secondary text-secondary-foreground">
-                        {tag}
-                      </span>
-                    ))}
+                    <a
+                      href={project.demoUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="p-3 rounded-full bg-white text-black shadow-md hover:scale-110 transition"
+                    >
+                      <ExternalLink size={18}/>
+                    </a>
+
+                    <a
+                      href={project.githubUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="p-3 rounded-full bg-white text-black shadow-md hover:scale-110 transition"
+                    >
+                      <Github size={18}/>
+                    </a>
+
                   </div>
-                }
-                {
-                  project?.demo ? (<h2
-                    className="text-2xl my-[20%] font-bold text-center text-primary animate-pulse"
-                  >
-                    Coming Soon...
-                  </h2>) :
-                    (<><h3 className="text-xl font-semibold mb-1"> {project.title}</h3>
-                      <p className="text-muted-foreground text-sm mb-4">
-                        {project.description}
-                      </p></>)
-                }
-                <div className="flex justify-between items-center">
-                  {
-                    project?.demo ? '' : (<div className="flex space-x-3">
-                      <a
-                        href={project.demoUrl}
-                        target="_blank"
-                        className="text-foreground/80 hover:text-primary transition-colors duration-300"
-                      >
-                        <ExternalLink size={20} />
-                      </a>
-                      <a
-                        href={project.githubUrl}
-                        target="_blank"
-                        className="text-foreground/80 hover:text-primary transition-colors duration-300"
-                      >
-                        <Github size={20} />
-                      </a>
-                    </div>)
-                  }
-                </div>
+                )}
+
               </div>
+
+              {/* Content */}
+              <div className="p-6 flex flex-col gap-4">
+
+                {/* Coming Soon Layout */}
+                {project?.demo ? (
+
+                  <div className="flex flex-col items-center justify-center text-center gap-3 py-6">
+
+                    <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center text-xl animate-pulse">
+                      🚀
+                    </div>
+
+                    <h3 className="text-lg font-semibold text-primary">
+                      Coming Soon
+                    </h3>
+
+                    <p className="text-sm text-muted-foreground">
+                      New project launching soon
+                    </p>
+
+                  </div>
+
+                ) : (
+
+                  <>
+                    {/* Tags */}
+                    {project?.tags?.length > 0 && (
+
+                      <div className="flex flex-wrap gap-2">
+
+                        {project.tags.map((tag, i) => (
+
+                          <span
+                            key={i}
+                            className="px-3 py-1 text-xs font-semibold rounded-full bg-primary/10 text-primary border border-primary/20 transition hover:bg-primary hover:text-white"
+                          >
+                            {String(tag).toUpperCase()}
+                          </span>
+
+                        ))}
+
+                      </div>
+
+                    )}
+
+                    {/* Title */}
+                    <h3 className="text-lg font-semibold tracking-wide">
+                      {project.title}
+                    </h3>
+
+                    {/* Description */}
+                    <p className="text-muted-foreground text-sm line-clamp-3">
+                      {project.description}
+                    </p>
+
+                  </>
+                )}
+
+              </div>
+
             </div>
-          )) : ''}
+
+          ))}
+
         </div>
 
-        <div className="text-center mt-12">
+        {/* Github Button */}
+        <div className="text-center mt-20">
+
           <a
             className="cosmic-button w-fit flex items-center mx-auto gap-2"
             target="_blank"
+            rel="noreferrer"
             href="https://github.com/ganjeliyajay"
           >
-            Check My Github <ArrowRight size={16} />
+            View More on Github
+            <ArrowRight size={16}/>
           </a>
+
         </div>
+
       </div>
+
     </section>
   );
 };

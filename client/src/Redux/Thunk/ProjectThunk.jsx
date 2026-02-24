@@ -8,7 +8,6 @@ export const getProject = createAsyncThunk('getproject', async (_, { rejectWithV
         const res = await axios.get(`${project}/portfolio/projects`, { withCredentials: true })
         return res.data
     } catch (error) {
-        console.log(error)
         return rejectWithValue({ error })
     }
 
