@@ -1,28 +1,33 @@
 import { useEffect, useState } from "react";
 
-// id, size, x, y, opacity, animationDuration
-// id, size, x, y, delay, animationDuration
-
 export const StarBackground = () => {
   const [stars, setStars] = useState([]);
-  const [meteors, setMeteors] = useState([]);
+  const [mouse, setMouse] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     generateStars();
-    generateMeteors();
 
-    const handleResize = () => {
-      generateStars();
+    const handleResize = () => generateStars();
+
+    const handleMouseMove = (e) => {
+      setMouse({
+        x: e.clientX,
+        y: e.clientY,
+      });
     };
 
     window.addEventListener("resize", handleResize);
+    window.addEventListener("mousemove", handleMouseMove);
 
-    return () => window.removeEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      window.removeEventListener("mousemove", handleMouseMove);
+    };
   }, []);
 
   const generateStars = () => {
     const numberOfStars = Math.floor(
-      (window.innerWidth * window.innerHeight) / 10000
+      (window.innerWidth * window.innerHeight) / 8000
     );
 
     const newStars = [];
@@ -31,65 +36,59 @@ export const StarBackground = () => {
       newStars.push({
         id: i,
         size: Math.random() * 3 + 1,
-        x: Math.random() * 100,
-        y: Math.random() * 100,
-        opacity: Math.random() * 0.5 + 0.5,
-        animationDuration: Math.random() * 4 + 2,
+        x: Math.random() * window.innerWidth,
+        y: Math.random() * window.innerHeight,
+        depth: Math.random() * 30 + 20,
       });
     }
 
     setStars(newStars);
   };
 
-  const generateMeteors = () => {
-    const numberOfMeteors = 4;
-    const newMeteors = [];
-
-    for (let i = 0; i < numberOfMeteors; i++) {
-      newMeteors.push({
-        id: i,
-        size: Math.random() * 2 + 1,
-        x: Math.random() * 100,
-        y: Math.random() * 20,
-        delay: Math.random() * 15,
-        animationDuration: Math.random() * 3 + 3,
-      });
-    }
-
-    setMeteors(newMeteors);
-  };
-
   return (
     <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-      {stars.map((star) => (
-        <div
-          key={star.id}
-          className="star animate-pulse-subtle"
-          style={{
-            width: star.size + "px",
-            height: star.size + "px",
-            left: star.x + "%",
-            top: star.y + "%",
-            opacity: star.opacity,
-            animationDuration: star.animationDuration + "s",
-          }}
-        />
-      ))}
 
-      {meteors.map((meteor) => (
-        <div
-          key={meteor.id}
-          className="meteor animate-meteor"
-          style={{
-            width: meteor.size * 50 + "px",
-            height: meteor.size * 2 + "px",
-            left: meteor.x + "%",
-            top: meteor.y + "%",
-            animationDelay: meteor.delay,
-            animationDuration: meteor.animationDuration + "s",
-          }}
-        />
-      ))}
+      {/* Cursor Glow */}
+      <div
+        className="absolute rounded-full blur-3xl opacity-40 pointer-events-none"
+        style={{
+          width: "300px",
+          height: "300px",
+          background:
+            "radial-gradient(circle, rgba(99,102,241,0.6), transparent)",
+          left: mouse.x - 150,
+          top: mouse.y - 150,
+          transition: "transform 0.1s linear",
+        }}
+      />
+
+      {/* Stars */}
+      {stars.map((star) => {
+        const dx = mouse.x - star.x;
+        const dy = mouse.y - star.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        let offsetX = 0;
+        let offsetY = 0;
+
+        if (distance < 150) {
+          offsetX = -dx * 0.05;
+          offsetY = -dy * 0.05;
+        }
+
+        return (
+          <div
+            key={star.id}
+            className="absolute rounded-full star-twinkle bg-foreground/70"
+            style={{
+              width: star.size,
+              height: star.size,
+              left: star.x + offsetX,
+              top: star.y + offsetY,
+            }}
+          />
+        );
+      })}
     </div>
   );
 };

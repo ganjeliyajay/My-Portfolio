@@ -4,6 +4,7 @@ import cors from 'cors'
 import { db } from './Configs/db.js'
 import { ProjectRoute } from './Routes/ProjectRoute.js'
 import { ContactRoute } from './Routes/ContactRoute.js'
+import { certificateRoute } from './Routes/CertificateRoute.js'
 
 dotenv.config()
 
@@ -34,6 +35,7 @@ db()
 //main route
 app.use('/portfolio', ProjectRoute)
 app.use('/portfolio', ContactRoute)
+app.use('/portfolio', certificateRoute)
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`server is running on : ${PORT}`))

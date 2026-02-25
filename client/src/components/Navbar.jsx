@@ -2,24 +2,36 @@ import { cn } from "@/lib/utils";
 import { Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import logo from "../assets/GJ-Logo.png";
+import { useDispatch } from "react-redux";
+import { getCertificate } from "../Redux/Thunk/CertificateThunk";
+import { toast, Bounce } from "react-toastify";
 
-const navItems = [
-  { name: "Home", href: "#hero" },
-  { name: "About", href: "#about" },
-  { name: "Skills", href: "#skills" },
-  { name: "Projects", href: "#projects" },
-  { name: "Contact", href: "#contact" },
-];
-
-export const Navbar = () => {
+export const Navbar = ({ setShowCertificate }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 10);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  //certificate button click handler
+  const handleCertificateClick = () => {
+    try {
+      dispatch(getCertificate());
+      setShowCertificate(true);
+    } catch (error) {
+      toast.error(error?.message || "Something went wrong", {
+        position: "top-right",
+        autoClose: 1000,
+        theme: "light",
+        transition: Bounce,
+      });
+    }
+  };
 
   return (
     <nav
@@ -29,6 +41,7 @@ export const Navbar = () => {
       )}
     >
       <div className="container flex items-center justify-between px-4 sm:px-6 relative">
+        
         {/* Logo */}
         <a
           className="text-xl font-bold text-primary flex items-center"
@@ -46,47 +59,91 @@ export const Navbar = () => {
 
         {/* Desktop Nav */}
         <div className="hidden md:flex space-x-8">
-          {navItems.map((item, key) => (
-            <a
-              key={key}
-              href={item.href}
-              className="text-foreground/80 hover:text-primary transition-colors font-medium duration-300 ease-in-out"
-            >
-              {item.name}
-            </a>
-          ))}
+
+          <a
+            href="#hero"
+            className="text-foreground/80 hover:text-primary transition-colors font-medium duration-300"
+          >
+            Home
+          </a>
+
+          <a
+            href="#about"
+            className="text-foreground/80 hover:text-primary transition-colors font-medium duration-300"
+          >
+            About
+          </a>
+
+          <a
+            href="#skills"
+            className="text-foreground/80 hover:text-primary transition-colors font-medium duration-300"
+          >
+            Skills
+          </a>
+
+          <button
+            onClick={handleCertificateClick}
+            className="text-foreground/80 hover:text-primary transition-colors font-medium duration-300"
+          >
+            Certificates
+          </button>
+
+          <a
+            href="#projects"
+            className="text-foreground/80 hover:text-primary transition-colors font-medium duration-300"
+          >
+            Projects
+          </a>
+
+          <a
+            href="#contact"
+            className="text-foreground/80 hover:text-primary transition-colors font-medium duration-300"
+          >
+            Contact
+          </a>
+
         </div>
 
-        {/* Mobile Menu Toggle — always on top */}
+        {/* Mobile Menu Toggle */}
         <button
           onClick={() => setIsMenuOpen((prev) => !prev)}
           className="md:hidden p-2 text-foreground z-[110] relative rounded-md focus:outline-none focus:ring-2 focus:ring-primary transition"
-          aria-label={isMenuOpen ? 'Close Menu' : 'Open Menu'}
         >
           {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
         </button>
       </div>
 
-      {/* Fullscreen Mobile Nav */}
+      {/* Mobile Nav */}
       <div
         className={cn(
-          "fixed top-0 left-0 w-full h-screen flex flex-col items-center justify-center bg-background/95 backdrop-blur-xl transition-all duration-300 ease-in-out md:hidden z-[90]",
+          "fixed top-0 left-0 w-full h-[80vh] flex flex-col items-center justify-center bg-background/95 backdrop-blur-xl transition-all duration-300 md:hidden z-[90]",
           isMenuOpen
             ? "opacity-100 visible translate-y-0"
             : "opacity-0 invisible -translate-y-full"
         )}
       >
-        <div className="flex flex-col items-center justify-center space-y-10 text-2xl font-semibold">
-          {navItems.map((item, key) => (
-            <a
-              key={key}
-              href={item.href}
-              className="text-foreground/90 hover:text-primary transition-colors duration-300 cursor-pointer"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              {item.name}
-            </a>
-          ))}
+        <div className="flex flex-col items-center space-y-10 text-2xl font-semibold">
+
+          <a href="#hero" onClick={() => setIsMenuOpen(false)}>Home</a>
+
+          <a href="#about" onClick={() => setIsMenuOpen(false)}>About</a>
+
+          <a href="#skills" onClick={() => setIsMenuOpen(false)}>Skills</a>
+
+          <a
+            href="#certificates"
+            onClick={() => {
+              setIsMenuOpen(false);
+              handleCertificateClick();
+            }}
+          >
+            Certificates
+          </a>
+
+          <a href="#projects" onClick={() => setIsMenuOpen(false)}>Projects</a>
+
+          <a href="#contact" onClick={() => setIsMenuOpen(false)}>Contact</a>
+
         </div>
       </div>
     </nav>

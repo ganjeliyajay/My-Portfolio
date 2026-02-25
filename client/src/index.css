@@ -152,19 +152,23 @@
   border: 1px solid transparent;
 }
 
- @utility cosmic-button {
+@utility cosmic-button {
   @apply px-6 py-2 rounded-full bg-primary text-primary-foreground font-medium transition-all duration-300 hover:shadow-[0_0_10px_rgba(139,92,246,0.5)] hover:scale-105 active:scale-95;
 }
 
-
 @utility star {
-  @apply absolute rounded-full bg-white;
-  box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.4);
+  @apply absolute rounded-full;
+  background: hsl(var(--foreground));
+  opacity: 0.6;
 }
 
 @utility meteor {
-  @apply absolute bg-linear-to-r from-white via-white to-transparent rounded-full;
-  box-shadow: 0 0 10px 5px rgba(255, 255, 255, 0.3);
+  @apply absolute rounded-full;
+  background: linear-gradient(
+    to right,
+    hsl(var(--foreground)),
+    transparent
+  );
 }
 
 #root {
@@ -205,32 +209,163 @@
   animation: fadeUp 0.9s cubic-bezier(.16,1,.3,1) forwards;
 }
 
+/* certificates section */
 
-@keyframes shimmer {
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #6366f1;
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #4f46e5;
+}
+
+/* h1 styling */
+
+.handwriting-text {
+  font-family: "Pacifico", cursive;
+  font-size: 60px;
+  stroke: #6366f1;
+  stroke-width: 2;
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: writeText 3s ease forwards, fillText 0.5s ease forwards 1s;
+}
+
+@keyframes writeText {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes fillText {
+  from {
+    fill: transparent;
+  }
+  to {
+    fill: hsl(var(--foreground));
+    stroke: transparent;
+  }
+}
+
+@keyframes textShimmer {
   0% {
-    transform: translateX(-100%);
+    background-position: 200% center;
   }
   100% {
-    transform: translateX(100%);
+    background-position: -200% center;
   }
 }
 
-.animate-shimmer {
-  animation: shimmer 1.8s infinite linear;
+.animate-textShimmer {
+  animation: textShimmer 4s linear infinite;
 }
 
-@keyframes fadeUp {
+.shimmer {
+  background: linear-gradient(
+    110deg,
+    transparent 25%,
+    rgba(255,255,255,0.2) 50%,
+    transparent 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmerMove 1.6s linear infinite;
+}
+
+@keyframes shimmerMove {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Star twinkle animation */
+
+.star-twinkle {
+  box-shadow: 0 0 6px rgba(255,255,255,0.8);
+  animation: twinkle ease-in-out infinite alternate;
+}
+
+@keyframes twinkle {
   from {
-    opacity: 0;
-    transform: translateY(25px);
+    opacity: 0.2;
+    transform: scale(0.8);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: scale(1.3);
   }
 }
 
-.fade-up {
-  opacity: 0;
-  animation: fadeUp 0.6s ease forwards;
+/* Meteor */
+
+.meteor-trail {
+  width: 120px;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    hsl(var(--foreground)),
+    transparent
+  );
+  border-radius: 50%;
+  transform: rotate(45deg);
+  animation: meteorMove linear infinite;
+}
+
+@keyframes meteorMove {
+  0% {
+    transform: translate(-200px, -200px) rotate(45deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(800px, 800px) rotate(45deg);
+    opacity: 0;
+  }
+}
+
+.star-twinkle {
+  box-shadow: 0 0 8px rgba(255,255,255,0.9);
+  animation: twinkle 2s ease-in-out infinite alternate;
+}
+
+@keyframes twinkle {
+  from {
+    opacity: 0.3;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1.4);
+  }
+}
+
+::selection {
+  background: hsl(var(--primary));
+  color: white;
+}
+
+.glass {
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.tilt-card {
+  transform-style: preserve-3d;
+  perspective: 1000px;
+  transition: transform 0.2s ease;
+}
+
+.tilt-inner {
+  transform-style: preserve-3d;
 }

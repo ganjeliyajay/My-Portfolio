@@ -14,6 +14,26 @@ export const ProjectsSection = () => {
     dispatch(getProject());
   }, [dispatch]);
 
+  const handleMouseMove = (e) => {
+    const card = e.currentTarget;
+    const rect = card.getBoundingClientRect();
+
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+
+    const rotateX = (y - centerY) / 12;
+    const rotateY = (centerX - x) / 12;
+
+    card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+  };
+
+  const resetTilt = (e) => {
+    e.currentTarget.style.transform = "rotateX(0deg) rotateY(0deg)";
+  };
+
   return (
     <section id="projects" className="py-24 px-6">
 
@@ -53,103 +73,108 @@ export const ProjectsSection = () => {
             <div
               key={project._id}
               style={{ animationDelay: `${index * 0.15}s` }}
-              className="group h-full bg-card border border-border rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-700 ease-out hover:-translate-y-3 fade-up"
+              className="group tilt-card bg-card border border-border rounded-2xl overflow-hidden transition-transform duration-200"
+              onMouseMove={handleMouseMove}
+              onMouseLeave={resetTilt}
             >
 
-              {/* Image */}
-              <div className="relative h-52 overflow-hidden">
+              <div className="tilt-inner">
 
-                <img
-                  loading="lazy"
-                  src={project?.demo ? commingSoon : project.image}
-                  alt={project.title}
-                  className="w-full h-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-110"
-                />
+                {/* Image */}
+                <div className="relative h-52 overflow-hidden">
 
-                {/* Hover Overlay */}
-                {!project?.demo && (
-                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all duration-700 ease-out flex items-center justify-center gap-4 opacity-0 group-hover:opacity-100">
+                  <img
+                    loading="lazy"
+                    src={project?.demo ? commingSoon : project.image}
+                    alt={project.title}
+                    className="w-full h-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-110"
+                  />
 
-                    <a
-                      href={project.demoUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="p-3 rounded-full bg-white text-black shadow-md hover:scale-110 transition"
-                    >
-                      <ExternalLink size={18}/>
-                    </a>
+                  {/* Hover Overlay */}
+                  {!project?.demo && (
+                    <div className="absolute inset-0 bg-background/0 group-hover:bg-background/60 transition-all duration-700 ease-out flex items-center justify-center gap-4 opacity-0 group-hover:opacity-100">
 
-                    <a
-                      href={project.githubUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="p-3 rounded-full bg-white text-black shadow-md hover:scale-110 transition"
-                    >
-                      <Github size={18}/>
-                    </a>
+                      <a
+                        href={project.demoUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="p-3 rounded-full bg-primary text-primary-foreground shadow-md hover:scale-110 transition"
+                      >
+                        <ExternalLink size={18}/>
+                      </a>
 
-                  </div>
-                )}
+                      <a
+                        href={project.githubUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="p-3 rounded-full bg-primary text-primary-foreground shadow-md hover:scale-110 transition"
+                      >
+                        <Github size={18}/>
+                      </a>
 
-              </div>
-
-              {/* Content */}
-              <div className="p-6 flex flex-col gap-4">
-
-                {/* Coming Soon Layout */}
-                {project?.demo ? (
-
-                  <div className="flex flex-col items-center justify-center text-center gap-3 py-6">
-
-                    <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center text-xl animate-pulse">
-                      🚀
                     </div>
+                  )}
 
-                    <h3 className="text-lg font-semibold text-primary">
-                      Coming Soon
-                    </h3>
+                </div>
 
-                    <p className="text-sm text-muted-foreground">
-                      New project launching soon
-                    </p>
+                {/* Content */}
+                <div className="p-6 flex flex-col gap-4">
 
-                  </div>
+                  {project?.demo ? (
 
-                ) : (
+                    <div className="flex flex-col items-center justify-center text-center gap-3 py-6">
 
-                  <>
-                    {/* Tags */}
-                    {project?.tags?.length > 0 && (
-
-                      <div className="flex flex-wrap gap-2">
-
-                        {project.tags.map((tag, i) => (
-
-                          <span
-                            key={i}
-                            className="px-3 py-1 text-xs font-semibold rounded-full bg-primary/10 text-primary border border-primary/20 transition hover:bg-primary hover:text-white"
-                          >
-                            {String(tag).toUpperCase()}
-                          </span>
-
-                        ))}
-
+                      <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center text-xl animate-pulse">
+                        🚀
                       </div>
 
-                    )}
+                      <h3 className="text-lg font-semibold text-primary">
+                        Coming Soon
+                      </h3>
 
-                    {/* Title */}
-                    <h3 className="text-lg font-semibold tracking-wide">
-                      {project.title}
-                    </h3>
+                      <p className="text-sm text-muted-foreground">
+                        New project launching soon
+                      </p>
 
-                    {/* Description */}
-                    <p className="text-muted-foreground text-sm line-clamp-3">
-                      {project.description}
-                    </p>
+                    </div>
 
-                  </>
-                )}
+                  ) : (
+
+                    <>
+                      {/* Tags */}
+                      {project?.tags?.length > 0 && (
+
+                        <div className="flex flex-wrap gap-2">
+
+                          {project.tags.map((tag, i) => (
+
+                            <span
+                              key={i}
+                              className="px-3 py-1 text-xs font-semibold rounded-full bg-primary/10 text-primary border border-primary/20 transition hover:bg-primary hover:text-primary-foreground"
+                            >
+                              {String(tag).toUpperCase()}
+                            </span>
+
+                          ))}
+
+                        </div>
+
+                      )}
+
+                      {/* Title */}
+                      <h3 className="text-lg font-semibold tracking-wide text-foreground">
+                        {project.title}
+                      </h3>
+
+                      {/* Description */}
+                      <p className="text-muted-foreground text-sm line-clamp-3">
+                        {project.description}
+                      </p>
+
+                    </>
+                  )}
+
+                </div>
 
               </div>
 
